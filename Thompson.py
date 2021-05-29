@@ -7,6 +7,7 @@ from Symbol import Symbol
 from State import State
 from Stack import Stack
 from Regex import Regex
+from PlotAutomaton import PlotAutomaton
 class Thompson:
     def __init__(self, regex):
         self.regex = Regex(regex)
@@ -121,7 +122,6 @@ class Thompson:
         self.automata.Fsm.Sigma = Alphabet([Symbol(x) for x in self.getAlphabetFromRegex()])
         self.automata.Fsm.q0 = Transition.getInitialStateFromTransition(self.pila.peek())
         self.automata.F = Transition.getFinalStateFromTransition(self.pila.peek())
-        Afn.printAutomata(self.automata)
 
     def ThompsonContruction(self):
         #compute transitions
@@ -136,3 +136,7 @@ class Thompson:
                 elif Symbol.isOr(x):
                     self.plantillaOr()
         self.getAFNFromTransitions()
+
+    def printAutomaton(self):
+        P = PlotAutomaton(self.automata)
+        P.plotAutomaton()
