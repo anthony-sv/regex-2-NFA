@@ -1,6 +1,6 @@
 from Postfix import Postfix
-from Afn import Afn
-from Fsm import Fsm
+from AFN import Afn
+from FSM import Fsm
 from Alphabet import Alphabet
 from Transition import Transition
 from Symbol import Symbol
@@ -31,11 +31,17 @@ class Thompson:
             return False
 
     def modRegex(self):
-        list = [char for char in self.regex.expression]
+        list = [char for char in self.regex.expression+'$']
+        nlist = []
         for i in range(len(list)-1):
-            if Thompson.isConcat(list[i], list[i+1]):
-                list.insert(i+1, '.')
-        return "".join(list)
+            if Thompson.isConcat(list[i], list[i+1]) and list[i+1] != '$':
+                nlist.append(list[i])
+                nlist.append('.')
+            elif(list[i] != list[-1] and list[i+1] != '$'):
+                nlist.append(list[i])
+            else:
+                nlist.append(list[i])
+        return "".join(nlist)
 
     def getAlphabetFromRegex(self):
         l = [char for char in self.regex.expression]
@@ -139,4 +145,4 @@ class Thompson:
 
     def printAutomaton(self):
         P = PlotAutomaton(self.automata)
-        P.plotAutomaton()
+        P.plotAutomaton(self.regex)
